@@ -349,6 +349,11 @@ function newperson_cancel()
 	hide_dialog();
 }
 
+function pickgames_back_clicked()
+{
+	location.href = "index.html";
+}
+
 function pickgames_next_clicked()
 {
 	location.href = "pickpersons.html";

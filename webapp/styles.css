@@ -1,0 +1,56 @@
+.template {
+	display: none !important;
+}
+
+.multi_select_icon_list .list_item {
+	height: 176px;
+	width: 150px;
+	padding: 2px;
+	border-top: 4px solid #ddd;
+	border-left: 4px solid #ddd;
+	border-bottom: 4px solid #777;
+	border-right: 4px solid #777;
+	display: inline-block;
+	text-align: center;
+	margin-right: 4pt;
+	background-color: #ccc;
+	overflow: hidden;
+	margin-bottom: 4px;
+	cursor: pointer;
+}
+
+.multi_select_icon_list .list_item_icon {
+	width: 150px;
+	height: 150px;
+}
+
+.multi_select_icon_list .multi_select_check {
+	position: absolute;
+	display: block;
+	z-index: 1;
+	width: 150px;
+	height: 150px;
+	background-size: 150px 150px;
+}
+
+.smallScreen .multi_select_icon_list .multi_select_check {
+	width: 100px;
+	height: 100px;
+	background-size: 100px 100px;
+}
+
+.multi_select_icon_list .list_item.selected .multi_select_check {
+	background-image: url(images/checkmark1.png);
+}
+
+.multi_select_icon_list .list_item.mousehold .multi_select_check {
+	background-image: url(images/checkmark2.png);
+}
+
+.multi_select_icon_list .list_item.mousehold.selected .multi_select_check {
+	background-image: url(images/checkmark2.png);
+}
+
+.multi_select_icon_list .list_item_btn {
+	display: none;
+}

@@ -68,7 +68,7 @@ function init_game_list(container_el)
 		$box.removeClass('template');
 		$('.list_item_icon', $box).attr('src',
 			g.icon ? ('images/games/'+g.icon+'.png') :
-				'images/games/generic_game.png'
+				'images/generic_game.png'
 			);
 		$('.list_item_label', $box).text(g.name);
 

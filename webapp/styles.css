@@ -98,3 +98,17 @@
 .dialog_content {
 	padding: 6px;
 }
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.page_header {
+	padding: 6pt;
+	border-bottom: 1px solid black;
+}
+
+.page_body {
+	padding: 6px;
+}

@@ -8,10 +8,20 @@
 <body>
 <div id="dimmer"></div>
 
-<div class="header">
-What games are available?
-<button type="button">Done</button>
+<div class="page_header">
+<div style="float:left">
+<button type="button">&lt; Back</button>
 </div>
+<div style="float:right">
+<button type="button">Next &gt;</button>
+</div>
+<div style="text-align: center; margin-top: 6px">
+What games are available?
+</div>
+<div style="clear:both"></div>
+</div><!--/page_header-->
+
+<div class="page_body">
 
 <div class="multi_select_icon_list_container">
 <div class="multi_select_icon_list game_list">
@@ -29,6 +39,7 @@ What games are available?
 <div>
 <button type="button" onclick="other_game_clicked()">Other Game</button>
 </div>
+</div><!--/page_body-->
 
 <div id="new_game_dialog" class="dialog">
 <div class="dialog_inner">

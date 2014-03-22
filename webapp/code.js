@@ -53,6 +53,29 @@ function multi_select__add_list_item_listeners($li)
 	}
 }
 
+function init_person_list(container_el)
+{
+	var person_ids = mystor_get_list(PACKAGE+'.known_persons');
+
+	for (var i = 0; i < person_ids.length; i++) {
+		var id = person_ids[i];
+		var p = {
+			'name': localStorage.getItem(PACKAGE+'.persons['+id+'].name')
+			};
+
+		var $box = $('.template', container_el).clone();
+		$box.removeClass('template');
+		$('.list_item_icon', $box).attr('src',
+			'images/generic_person.png'
+			);
+		$('.list_item_label', $box).text(p.name);
+
+		$box.attr('data-item-id', id);
+		multi_select__add_list_item_listeners($box);
+		$(container_el).append($box);
+	}
+}
+
 function init_game_list(container_el)
 {
 	var game_ids = mystor_get_list(PACKAGE+'.known_games');
@@ -139,8 +162,53 @@ function newgame_cancel()
 	hide_dialog();
 }
 
+function newperson_clicked()
+{
+	var f = document.newperson_form;
+	f.person_name.value = '';
+
+	$('#dimmer').show();
+	$('#new_person_dialog').show();
+}
+
+function newperson_submit()
+{
+	var f = document.newperson_form;
+	if (f.person_name.value == '') {
+		alert("Name is missing.");
+		return;
+	}
+
+	var id = next_id();
+	localStorage.setItem(PACKAGE+'.persons['+id+'].name', f.person_name.value);
+
+	mystor_add_to_list(PACKAGE+'.known_persons', id);
+	location.reload();
+}
+
+function newperson_cancel()
+{
+	hide_dialog();
+}
+
+function pickgames_next_clicked()
+{
+	location.href = "pickpersons.html";
+}
+
+function pickpersons_back_clicked()
+{
+	location.href = "pickgames.html";
+}
+
+function pickpersons_next_clicked()
+{
+	alert('not implemented');
+}
+
 $(function() { // on page ready
 
 	$('.game_list').each(function(i,el) { init_game_list(el); });
+	$('.persons_list').each(function(i,el) { init_person_list(el); });
 
 });

@@ -10,13 +10,13 @@
 
 <div class="page_header">
 <div style="float:left">
-<button type="button">&lt; Back</button>
+<button type="button" onclick="pickpersons_back_clicked()">&lt; Back</button>
 </div>
 <div style="float:right">
-<button type="button" onclick="pickgames_next_clicked()">Next &gt;</button>
+<button type="button" onclick="pickpersons_next_clicked()">Next &gt;</button>
 </div>
 <div style="text-align: center; margin-top: 6px">
-What games are available?
+Who is present?
 </div>
 <div style="clear:both"></div>
 </div><!--/page_header-->
@@ -24,7 +24,7 @@ What games are available?
 <div class="page_body">
 
 <div class="multi_select_icon_list_container">
-<div class="multi_select_icon_list game_list">
+<div class="multi_select_icon_list persons_list">
 <div class="list_item template">
 <span class="multi_select_check"></span>
 	<div class="list_item_icon_container">
@@ -37,21 +37,19 @@ What games are available?
 </div><!--/multi_select_icon_list_container -->
 
 <div>
-<button type="button" onclick="other_game_clicked()">Other Game</button>
+<button type="button" onclick="newperson_clicked()">New Person</button>
 </div>
 </div><!--/page_body-->
 
-<div id="new_game_dialog" class="dialog">
+<div id="new_person_dialog" class="dialog">
 <div class="dialog_inner">
-<div class="dialog_title">New Game</div>
+<div class="dialog_title">New Person</div>
 <div class="dialog_content">
-<form name="newgame_form" method="post" onsubmit="newgame_submit();return false">
-<div><label>Name:<input type="text" name="game_name"></label></div>
-<div><label>Icon:<input type="text" name="game_icon"></label></div>
-<div><label>Players:<input type="text" name="players_range"></label></div>
+<form name="newperson_form" method="post" onsubmit="newperson_submit();return false">
+<div><label>Name:<input type="text" name="person_name"></label></div>
 <div>
 <button type="submit">OK</button>
-<button type="button" onclick="newgame_cancel()">Cancel</button>
+<button type="button" onclick="newperson_cancel()">Cancel</button>
 </div>
 </form>
 </div><!--/dialog_content-->

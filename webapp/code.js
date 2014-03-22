@@ -10,11 +10,31 @@ function multi_select__mousecancel()
 {
 	var boxEl = multi_select__mouse.el;
 	$(boxEl).removeClass('mousehold');
+
+	if (multi_select__mouse.longpress_timer) {
+		clearTimeout(multi_select__mouse.longpress_timer);
+		multi_select__mouse.longpress_timer = null;
+	}
+
 	multi_select__mouse = null;
 
 	boxEl.removeEventListener('mouseenter', multi_select__mouseenter, false);
 	boxEl.removeEventListener('mouseleave', multi_select__mouseleave, false);
 	document.removeEventListener('mouseup', multi_select__mouseup, false);
+}
+
+function multi_select__longpress()
+{
+	if (multi_select__mouse) {
+		multi_select__mouse.longpress_timer = null;
+
+		var boxEl = multi_select__mouse.el;
+		if ($(boxEl).triggerHandler('longpress', [])) {
+
+			// event was handled
+			multi_select__mousecancel();
+		}
+	}
 }
 
 function multi_select__mousedown(evt)
@@ -34,6 +54,9 @@ function multi_select__mousedown(evt)
 	this.addEventListener('mouseleave', multi_select__mouseleave, false);
 	document.addEventListener('mouseup', multi_select__mouseup, false);
 
+	var tmr = setTimeout(multi_select__longpress, 1200);
+	multi_select__mouse.longpress_timer = tmr;
+
 	evt.stopPropagation();
 	return;
 }
@@ -51,6 +74,14 @@ function multi_select__mouseleave(evt)
 	if (multi_select__mouse) {
 		$(multi_select__mouse.el).removeClass('mousehold');
 		multi_select__mouse.down = false;
+
+		// once pointer has moved off the button,
+		// stop looking for a long-press to happen.
+
+		if (multi_select__mouse.longpress_timer) {
+			clearTimeout(multi_select__mouse.longpress_timer);
+			multi_select__mouse.longpress_timer = null;
+		}
 	}
 }
 
@@ -96,8 +127,32 @@ function multi_select__add_list_item_listeners($li)
 	}
 	else {
 		$li.mousedown(multi_select__mousedown);
-		//$li.mouseup(multi_select__mouseup);
 	}
+}
+
+var editperson_id = null;
+function editperson_remove()
+{
+	mystor_remove_from_set(PACKAGE+'.known_persons', editperson_id);
+	hide_dialog();
+
+	location.reload();
+}
+
+function person_longpress(evt)
+{
+	var boxEl = this;
+	var id = boxEl.getAttribute('data-item-id');
+	var p = {
+		'name': localStorage.getItem(PACKAGE+'.persons['+id+'].name')
+		};
+
+	editperson_id = id;
+	$('#dimmer').show();
+	$('#edit_person_dialog .person_name').text(p.name);
+	$('#edit_person_dialog').show();
+
+	return true;
 }
 
 function init_person_list(container_el)
@@ -120,6 +175,8 @@ function init_person_list(container_el)
 		$box.attr('data-item-id', id);
 		multi_select__add_list_item_listeners($box);
 		$(container_el).append($box);
+
+		$box.on('longpress', person_longpress);
 	}
 }
 
@@ -185,6 +242,28 @@ function mystor_add_to_list(key, value)
 	var a = mystor_get_list(key);
 	a.push(value);
 	localStorage.setItem(key, a.join(','));
+}
+
+function mystor_remove_from_set(set_name, value)
+{
+	// stringify
+	value = ""+value;
+
+	var a = mystor_get_list(set_name);
+	var any_found = false;
+	var b = [];
+	for (var i = 0; i < a.length; i++) {
+		if (a[i] == value) {
+			any_found = true;
+		}
+		else {
+			b.push(a[i]);
+		}
+	}
+	if (any_found) {
+		localStorage.setItem(set_name, b.join(','));
+	}
+	return any_found;
 }
 
 function newgame_submit()

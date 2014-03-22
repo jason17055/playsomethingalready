@@ -54,3 +54,47 @@
 .multi_select_icon_list .list_item_btn {
 	display: none;
 }
+
+#dimmer {
+	display: none;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1 !important;
+	background-color: black;
+	filter: alpha(opacity=75);
+	-khtml-opacity: 0.75;
+	-moz-opacity: 0.75;
+	opacity: 0.75;
+}
+
+.dialog {
+	display: none;
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	position: absolute;
+	z-index: 5;
+}
+.dialog_inner {
+	width: 400px;
+	height: 400px;
+	margin: 50px auto 0 auto;
+	padding: 0;
+	background-color: #fff;
+	border: 2px solid #ccc;
+	color: #333;
+}
+.dialog_title {
+	width: 100%;
+	background-color: #3e327a;
+	color: yellow;
+	font-weight: bold;
+	text-align: center;
+	border-bottom: 2px solid #ccc;
+}
+.dialog_content {
+	padding: 6px;
+}

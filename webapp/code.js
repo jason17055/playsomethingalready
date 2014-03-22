@@ -1,3 +1,5 @@
+var PACKAGE='playsomething';
+
 function locationform_submit()
 {
 	location.href="pickgames.html";
@@ -53,17 +55,88 @@ function multi_select__add_list_item_listeners($li)
 
 function init_game_list(container_el)
 {
-	for (var i = 0; i < 10; i++) {
+	var game_ids = mystor_get_list(PACKAGE+'.known_games');
+
+	for (var i = 0; i < game_ids.length; i++) {
+		var id = game_ids[i];
+		var g = {
+			'name': localStorage.getItem(PACKAGE+'.games['+id+'].name'),
+			'icon': localStorage.getItem(PACKAGE+'.games['+id+'].icon')
+			};
+
 		var $box = $('.template', container_el).clone();
 		$box.removeClass('template');
-		$('.list_item_icon', $box).attr('src', 'images/person_icon.png');
-		$('.list_item_label', $box).text('Dominion'+i);
+		$('.list_item_icon', $box).attr('src',
+			g.icon ? ('images/games/'+g.icon+'.png') :
+				'images/games/generic_game.png'
+			);
+		$('.list_item_label', $box).text(g.name);
 
-		$box.attr('data-item-id', 'Dominion'+i);
+		$box.attr('data-item-id', id);
 		multi_select__add_list_item_listeners($box);
 		$(container_el).append($box);
 	}
 
+}
+
+function hide_dialog()
+{
+	$('#dimmer').hide();
+	$('.dialog').hide();
+}
+
+function other_game_clicked()
+{
+	var f = document.newgame_form;
+	f.game_name.value = '';
+	f.game_icon.value = '';
+	f.players_range.value = '';
+
+	$('#dimmer').show();
+	$('#new_game_dialog').show();
+}
+
+function next_id()
+{
+	var last_id = +(localStorage.getItem(PACKAGE+'.last_dynamic_id') || 0);
+	last_id--;
+	localStorage.setItem(PACKAGE+'.last_dynamic_id', last_id);
+	return last_id;
+}
+
+function mystor_get_list(key)
+{
+	var x = localStorage.getItem(key);
+	return x ? x.split(',') : [];
+}
+
+function mystor_add_to_list(key, value)
+{
+	var a = mystor_get_list(key);
+	a.push(value);
+	localStorage.setItem(key, a.join(','));
+}
+
+function newgame_submit()
+{
+	var f = document.newgame_form;
+	if (f.game_name.value == '') {
+		alert("Name is missing.");
+		return;
+	}
+
+	var id = next_id();
+	localStorage.setItem(PACKAGE+'.games['+id+'].name', f.game_name.value);
+	localStorage.setItem(PACKAGE+'.games['+id+'].icon', f.game_icon.value);
+	localStorage.setItem(PACKAGE+'.games['+id+'].players_range', f.players_range.value);
+
+	mystor_add_to_list(PACKAGE+'.known_games', id);
+	location.reload();
+}
+
+function newgame_cancel()
+{
+	hide_dialog();
 }
 
 $(function() { // on page ready

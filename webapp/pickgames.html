@@ -6,6 +6,8 @@
 <script type="text/javascript" src="code.js"></script>
 </head>
 <body>
+<div id="dimmer"></div>
+
 <div class="header">
 What games are available?
 <button type="button">Done</button>
@@ -23,6 +25,27 @@ What games are available?
 </div>
 </div><!--/multi_select_icon_list -->
 </div><!--/multi_select_icon_list_container -->
+
+<div>
+<button type="button" onclick="other_game_clicked()">Other Game</button>
+</div>
+
+<div id="new_game_dialog" class="dialog">
+<div class="dialog_inner">
+<div class="dialog_title">New Game</div>
+<div class="dialog_content">
+<form name="newgame_form" method="post" onsubmit="newgame_submit();return false">
+<div><label>Name:<input type="text" name="game_name"></label></div>
+<div><label>Icon:<input type="text" name="game_icon"></label></div>
+<div><label>Players:<input type="text" name="players_range"></label></div>
+<div>
+<button type="submit">OK</button>
+<button type="button" onclick="newgame_cancel()">Cancel</button>
+</div>
+</form>
+</div><!--/dialog_content-->
+</div><!--/dialog_inner-->
+</div><!--/dialog-->
 
 </body>
 </html>

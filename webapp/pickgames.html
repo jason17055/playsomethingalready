@@ -59,5 +59,25 @@ What games are available?
 </div><!--/dialog_inner-->
 </div><!--/dialog-->
 
+<div id="edit_game_dialog" class="dialog">
+<div class="dialog_inner">
+<div class="dialog_title"><span class="game_name"></span></div>
+<div class="dialog_content">
+<div style="text-align:center">
+<img class="game_icon" src="">
+</div>
+<form name="editgame_form" method="post" onsubmit="return false">
+<div>
+<button type="button" onclick="editgame_remove()">Remove from List</button>
+</div>
+<div>
+<button type="button" onclick="hide_dialog()">Cancel</button>
+</div>
+</div>
+</form>
+</div><!--/dialog_content-->
+</div><!--/dialog_inner-->
+</div><!--/dialog-->
+
 </body>
 </html>

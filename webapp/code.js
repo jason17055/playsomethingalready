@@ -180,6 +180,36 @@ function init_person_list(container_el)
 	}
 }
 
+var editgame_id = null;
+function editgame_remove()
+{
+	mystor_remove_from_set(PACKAGE+'.known_games', editgame_id);
+	hide_dialog();
+
+	location.reload();
+}
+
+function game_longpress(evt)
+{
+	var boxEl = this;
+	var id = boxEl.getAttribute('data-item-id');
+	var g = {
+		'name': localStorage.getItem(PACKAGE+'.games['+id+'].name'),
+		'icon': localStorage.getItem(PACKAGE+'.games['+id+'].icon')
+		};
+
+	editgame_id = id;
+	$('#dimmer').show();
+	$('#edit_game_dialog .game_name').text(g.name);
+	$('#edit_game_dialog .game_icon').attr('src',
+			g.icon ? ('images/games/'+g.icon+'.png') :
+				'images/generic_game.png'
+			);
+	$('#edit_game_dialog').show();
+
+	return true;
+}
+
 function init_game_list(container_el)
 {
 	var game_ids = mystor_get_list(PACKAGE+'.known_games');
@@ -202,6 +232,8 @@ function init_game_list(container_el)
 		$box.attr('data-item-id', id);
 		multi_select__add_list_item_listeners($box);
 		$(container_el).append($box);
+
+		$box.on('longpress', game_longpress);
 	}
 
 }

@@ -90,6 +90,8 @@ function multi_select__mouseup(evt)
 			var cbEl = $('input.list_item_btn', boxEl).get(0);
 			cbEl.checked = !cbEl.checked;
 			multi_select__update_checks();
+
+			$(boxEl).triggerHandler('toggled');
 		}
 
 		multi_select__mousecancel();
@@ -99,13 +101,22 @@ function multi_select__mouseup(evt)
 	return;
 }
 
-function multi_select__update_checks()
+function multi_select__get_selected()
 {
 	var found = [];
 	$('.multi_select_icon_list .list_item').each(function(i,el) {
 		if ($('input.list_item_btn', el).get(0).checked) {
-			$(el).addClass('selected');
 			found.push(el.getAttribute('data-item-id'));
+		}
+	});
+	return found;
+}
+
+function multi_select__update_checks()
+{
+	$('.multi_select_icon_list .list_item').each(function(i,el) {
+		if ($('input.list_item_btn', el).get(0).checked) {
+			$(el).addClass('selected');
 		} else {
 			$(el).removeClass('selected');
 		}

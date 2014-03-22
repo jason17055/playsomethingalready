@@ -2,7 +2,30 @@ var PACKAGE='playsomething';
 
 function locationform_submit()
 {
+	var f = document.locationform;
+	if (f.location.value == '') {
+		alert("Location is blank.");
+		return;
+	}
+
+	var datePart = new Date().toISOString();
+	datePart = datePart.replace(/T.*/, '');
+
+	var event_name = datePart + '/' + f.location.value;
+	var event_id = localStorage.getItem(PACKAGE+'.events_by_name['+event_name+']');
+	if (!event_id) {
+		event_id = next_id();
+		localStorage.setItem(PACKAGE+'.events['+event_id+'].name', event_name);
+		localStorage.setItem(PACKAGE+'.events_by_name['+event_name+']', event_id);
+	}
+
+	localStorage.setItem(PACKAGE+'.session.current_event', event_id);
 	location.href="pickgames.html";
+}
+
+function my_event()
+{
+	return (localStorage.getItem(PACKAGE+'.session.current_event') || 0);
 }
 
 var editperson_id = null;
@@ -30,9 +53,16 @@ function person_longpress(evt)
 	return true;
 }
 
+function save_person_list()
+{
+	var person_ids = multi_select__get_selected();
+	mystor_put_list(PACKAGE+'.events['+my_event()+'].persons', person_ids);
+}
+
 function init_person_list(container_el)
 {
 	var person_ids = mystor_get_list(PACKAGE+'.known_persons');
+	var selected_persons = mystor_get_set_as_map(PACKAGE+'.events['+my_event()+'].persons');
 
 	for (var i = 0; i < person_ids.length; i++) {
 		var id = person_ids[i];
@@ -47,12 +77,18 @@ function init_person_list(container_el)
 			);
 		$('.list_item_label', $box).text(p.name);
 
+		if (selected_persons[id]) {
+			$('input', $box).attr('checked', 'checked');
+		}
+
 		$box.attr('data-item-id', id);
 		multi_select__add_list_item_listeners($box);
 		$(container_el).append($box);
 
 		$box.on('longpress', person_longpress);
+		$box.on('toggled', save_person_list);
 	}
+	multi_select__update_checks();
 }
 
 var editgame_id = null;
@@ -85,9 +121,16 @@ function game_longpress(evt)
 	return true;
 }
 
+function save_game_list()
+{
+	var game_ids = multi_select__get_selected();
+	mystor_put_list(PACKAGE+'.events['+my_event()+'].games', game_ids);
+}
+
 function init_game_list(container_el)
 {
 	var game_ids = mystor_get_list(PACKAGE+'.known_games');
+	var selected_games = mystor_get_set_as_map(PACKAGE+'.events['+my_event()+'].games');
 
 	for (var i = 0; i < game_ids.length; i++) {
 		var id = game_ids[i];
@@ -104,13 +147,19 @@ function init_game_list(container_el)
 			);
 		$('.list_item_label', $box).text(g.name);
 
+		if (selected_games[id]) {
+			$('input', $box).attr('checked', 'checked');
+		}
+
 		$box.attr('data-item-id', id);
 		multi_select__add_list_item_listeners($box);
 		$(container_el).append($box);
 
 		$box.on('longpress', game_longpress);
+		$box.on('toggled', save_game_list);
 	}
 
+	multi_select__update_checks();
 }
 
 function hide_dialog()
@@ -144,11 +193,26 @@ function mystor_get_list(key)
 	return x ? x.split(',') : [];
 }
 
+function mystor_get_set_as_map(key)
+{
+	var a = mystor_get_list(key);
+	var rv = {};
+	for (var i = 0; i < a.length; i++) {
+		rv[a[i]]=true;
+	}
+	return rv;
+}
+
 function mystor_add_to_list(key, value)
 {
 	var a = mystor_get_list(key);
 	a.push(value);
-	localStorage.setItem(key, a.join(','));
+	mystor_put_list(key, a);
+}
+
+function mystor_put_list(listname, new_list)
+{
+	localStorage.setItem(listname, new_list.join(','));
 }
 
 function mystor_remove_from_set(set_name, value)

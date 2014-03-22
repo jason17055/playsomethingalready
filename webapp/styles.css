@@ -107,6 +107,12 @@ body {
 .page_header {
 	padding: 6pt;
 	border-bottom: 1px solid black;
+	text-align: center;
+}
+
+.page_header h1 {
+	margin: 0;
+	padding: 0;
 }
 
 .page_body {

@@ -5,10 +5,17 @@ function locationform_submit()
 	location.href="pickgames.html";
 }
 
+var multi_select__mouse = null;
 function multi_select__mousedown(evt)
 {
 	evt.preventDefault();
 	$(this).addClass('mousehold');
+
+	multi_select__mouse = {
+		'down': true,
+		'el': this
+		};
+	document.addEventListener('mouseup', multi_select__mouseup, false);
 
 	evt.stopPropagation();
 	return;
@@ -17,12 +24,19 @@ function multi_select__mousedown(evt)
 function multi_select__mouseup(evt)
 {
 	evt.preventDefault();
-	$(this).removeClass('mousehold');
 
-	var cbEl = $('input.list_item_btn', this).get(0);
-	cbEl.checked = !cbEl.checked;
+	if (multi_select__mouse) {
 
-	multi_select__update_checks();
+		var boxEl = multi_select__mouse.el;
+		$(boxEl).removeClass('mousehold');
+
+		var cbEl = $('input.list_item_btn', boxEl).get(0);
+		cbEl.checked = !cbEl.checked;
+
+		multi_select__update_checks();
+	}
+
+	document.removeEventListener('mouseup', multi_select__mouseup, false);
 
 	evt.stopPropagation();
 	return;
@@ -49,7 +63,7 @@ function multi_select__add_list_item_listeners($li)
 	}
 	else {
 		$li.mousedown(multi_select__mousedown);
-		$li.mouseup(multi_select__mouseup);
+		//$li.mouseup(multi_select__mouseup);
 	}
 }
 

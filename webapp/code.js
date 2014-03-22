@@ -6,19 +6,52 @@ function locationform_submit()
 }
 
 var multi_select__mouse = null;
+function multi_select__mousecancel()
+{
+	var boxEl = multi_select__mouse.el;
+	$(boxEl).removeClass('mousehold');
+	multi_select__mouse = null;
+
+	boxEl.removeEventListener('mouseenter', multi_select__mouseenter, false);
+	boxEl.removeEventListener('mouseleave', multi_select__mouseleave, false);
+	document.removeEventListener('mouseup', multi_select__mouseup, false);
+}
+
 function multi_select__mousedown(evt)
 {
 	evt.preventDefault();
 	$(this).addClass('mousehold');
 
+	if (multi_select__mouse) {
+		multi_select__mousecancel();
+	}
+
 	multi_select__mouse = {
 		'down': true,
 		'el': this
 		};
+	this.addEventListener('mouseenter', multi_select__mouseenter, false);
+	this.addEventListener('mouseleave', multi_select__mouseleave, false);
 	document.addEventListener('mouseup', multi_select__mouseup, false);
 
 	evt.stopPropagation();
 	return;
+}
+
+function multi_select__mouseenter(evt)
+{
+	if (multi_select__mouse) {
+		$(multi_select__mouse.el).addClass('mousehold');
+		multi_select__mouse.down = true;
+	}
+}
+
+function multi_select__mouseleave(evt)
+{
+	if (multi_select__mouse) {
+		$(multi_select__mouse.el).removeClass('mousehold');
+		multi_select__mouse.down = false;
+	}
 }
 
 function multi_select__mouseup(evt)
@@ -27,16 +60,16 @@ function multi_select__mouseup(evt)
 
 	if (multi_select__mouse) {
 
-		var boxEl = multi_select__mouse.el;
-		$(boxEl).removeClass('mousehold');
+		if (multi_select__mouse.down) {
 
-		var cbEl = $('input.list_item_btn', boxEl).get(0);
-		cbEl.checked = !cbEl.checked;
+			var boxEl = multi_select__mouse.el;
+			var cbEl = $('input.list_item_btn', boxEl).get(0);
+			cbEl.checked = !cbEl.checked;
+			multi_select__update_checks();
+		}
 
-		multi_select__update_checks();
+		multi_select__mousecancel();
 	}
-
-	document.removeEventListener('mouseup', multi_select__mouseup, false);
 
 	evt.stopPropagation();
 	return;

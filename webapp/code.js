@@ -308,9 +308,30 @@ function pickpersons_next_clicked()
 	alert('not implemented');
 }
 
+function check_screen_size()
+{
+	if (window.innerWidth <= window.innerHeight) {
+		$('body').removeClass('landscape');
+		$('body').addClass('portrait');
+	}
+	else {
+		$('body').removeClass('portrait');
+		$('body').addClass('landscape');
+	}
+
+	if (window.innerWidth <= 320) {
+		$('body').addClass('smallScreen');
+	}
+	else {
+		$('body').removeClass('smallScreen');
+	}
+}
+
 $(function() { // on page ready
 
 	$('.game_list').each(function(i,el) { init_game_list(el); });
 	$('.persons_list').each(function(i,el) { init_person_list(el); });
 
+	check_screen_size();
+	window.onresize = check_screen_size;
 });

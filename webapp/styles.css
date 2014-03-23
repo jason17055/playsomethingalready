@@ -9,6 +9,8 @@ body {
 .page_header_container {
 	position: absolute;
 	width: 640px;
+	height: 40px;
+	overflow: hidden;
 }
 
 .page_body_container {
@@ -146,6 +148,10 @@ body {
 	margin: 0;
 	padding: 0;
 	font-size: 24px;
+}
+
+.page_header button {
+	height: 28px;
 }
 
 .page_body {

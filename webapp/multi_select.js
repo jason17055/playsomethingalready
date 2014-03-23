@@ -130,31 +130,45 @@ function multi_select__touchstart(evt)
 {
 	var el = this;
 	var touch = evt.changedTouches[0];
+	var origX = touch.clientX;
 	var origY = touch.clientY;
 	var origScroll = $('.page_body_container').get(0).scrollTop;
 	var pressCanceled = false;
 
 	var on_touchmove = function(evt) {
+		var dx = evt.changedTouches[0].clientX - origX;
 		var dy = evt.changedTouches[0].clientY - origY;
-		//$('.page_body_container').get(0).scrollTop = origScroll-dy;
 
-		if (!pressCanceled && Math.abs(dy) > 30) {
+		if (!pressCanceled && Math.abs(dx)+Math.abs(dy) >= 20) {
+			// cancel press, start moving
 			pressCanceled = true;
 			multi_select__mousecancel();
 		}
+
+		if (pressCanceled) {
+			$('.page_body_container').get(0).scrollTop = origScroll-dy;
+		}
+		
+		evt.preventDefault();
+		evt.stopPropagation();
 	};
 	var on_touchend = function(evt) {
 		if (!pressCanceled) {
 			multi_select__mouseup(evt);
 		}
-		el.removeEventListener('touchmove', on_touchmove, false);
-		el.removeEventListener('touchend', on_touchend, false);
+		document.removeEventListener('touchmove', on_touchmove, false);
+		document.removeEventListener('touchend', on_touchend, false);
+
+		evt.preventDefault();
+		evt.stopPropagation();
 	};
 
-	el.addEventListener('touchmove', on_touchmove, false);
-	el.addEventListener('touchend', on_touchend, false);
+	document.addEventListener('touchmove', on_touchmove, false);
+	document.addEventListener('touchend', on_touchend, false);
 
 	multi_select__mousedown(evt);
+	evt.preventDefault();
+	evt.stopPropagation();
 }
 
 function multi_select__add_list_item_listeners($li)

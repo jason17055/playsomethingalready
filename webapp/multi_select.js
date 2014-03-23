@@ -32,8 +32,8 @@ function multi_select__longpress()
 
 function multi_select__mousedown(evt)
 {
-	evt.preventDefault();
-	$(this).addClass('mousehold');
+	var el = evt.currentTarget;
+	$(el).addClass('mousehold');
 
 	if (multi_select__mouse) {
 		multi_select__mousecancel();
@@ -41,16 +41,19 @@ function multi_select__mousedown(evt)
 
 	multi_select__mouse = {
 		'down': true,
-		'el': this
+		'el': el
 		};
-	this.addEventListener('mouseenter', multi_select__mouseenter, false);
-	this.addEventListener('mouseleave', multi_select__mouseleave, false);
-	document.addEventListener('mouseup', multi_select__mouseup, false);
 
-	var tmr = setTimeout(multi_select__longpress, 1200);
+	var tmr = setTimeout(multi_select__longpress, 1500);
 	multi_select__mouse.longpress_timer = tmr;
 
-	evt.stopPropagation();
+	if (evt.type == 'mousedown') {
+		evt.preventDefault();
+		evt.stopPropagation();
+		el.addEventListener('mouseenter', multi_select__mouseenter, false);
+		el.addEventListener('mouseleave', multi_select__mouseleave, false);
+		document.addEventListener('mouseup', multi_select__mouseup, false);
+	}
 	return;
 }
 
@@ -123,11 +126,41 @@ function multi_select__update_checks()
 	});
 }
 
+function multi_select__touchstart(evt)
+{
+	var el = this;
+	var touch = evt.changedTouches[0];
+	var origY = touch.clientY;
+	var origScroll = $('.page_body_container').get(0).scrollTop;
+	var pressCanceled = false;
+
+	var on_touchmove = function(evt) {
+		var dy = evt.changedTouches[0].clientY - origY;
+		//$('.page_body_container').get(0).scrollTop = origScroll-dy;
+
+		if (!pressCanceled && Math.abs(dy) > 30) {
+			pressCanceled = true;
+			multi_select__mousecancel();
+		}
+	};
+	var on_touchend = function(evt) {
+		if (!pressCanceled) {
+			multi_select__mouseup(evt);
+		}
+		el.removeEventListener('touchmove', on_touchmove, false);
+		el.removeEventListener('touchend', on_touchend, false);
+	};
+
+	el.addEventListener('touchmove', on_touchmove, false);
+	el.addEventListener('touchend', on_touchend, false);
+
+	multi_select__mousedown(evt);
+}
+
 function multi_select__add_list_item_listeners($li)
 {
 	if ('ontouchstart' in window) {
-		$li.get(0).addEventListener("touchstart", multi_select__mousedown, false);
-		$li.get(0).addEventListener("touchend", multi_select__mouseup, false);
+		$li.get(0).addEventListener("touchstart", multi_select__touchstart, false);
 	}
 	else {
 		$li.mousedown(multi_select__mousedown);

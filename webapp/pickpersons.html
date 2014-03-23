@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html>
 <head>
 <title>Play Something Already!</title>
@@ -10,6 +11,7 @@
 <body>
 <div id="dimmer"></div>
 
+<div class="page_header_container">
 <div class="page_header">
 <div style="float:left">
 <button type="button" onclick="pickpersons_back_clicked()">&lt; Back</button>
@@ -22,7 +24,9 @@ Who is present?
 </div>
 <div style="clear:both"></div>
 </div><!--/page_header-->
+</div><!--/page_header_container-->
 
+<div class="page_body_container">
 <div class="page_body">
 
 <div class="multi_select_icon_list_container">
@@ -42,6 +46,7 @@ Who is present?
 <button type="button" onclick="newperson_clicked()">New Person</button>
 </div>
 </div><!--/page_body-->
+</div><!--/page_body_container-->
 
 <div id="new_person_dialog" class="dialog">
 <div class="dialog_inner">

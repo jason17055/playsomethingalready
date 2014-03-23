@@ -20,7 +20,7 @@ function locationform_submit()
 	}
 
 	localStorage.setItem(PACKAGE+'.session.current_event', event_id);
-	location.href="pickgames.html";
+	location.href="pickpersons.html";
 }
 
 function my_event()
@@ -290,22 +290,22 @@ function newperson_cancel()
 
 function pickgames_back_clicked()
 {
-	location.href = "index.html";
+	location.href = "pickpersons.html";
 }
 
 function pickgames_next_clicked()
 {
-	location.href = "pickpersons.html";
+	alert('not implemented');
 }
 
 function pickpersons_back_clicked()
 {
-	location.href = "pickgames.html";
+	location.href = "index.html";
 }
 
 function pickpersons_next_clicked()
 {
-	alert('not implemented');
+	location.href = "pickgames.html";
 }
 
 function check_screen_size()
@@ -325,6 +325,20 @@ function check_screen_size()
 	else {
 		$('body').removeClass('smallScreen');
 	}
+
+	var headHeight = +($('.page_header').outerHeight());
+	var newWidth = window.innerWidth;
+	var newHeight = window.innerHeight - headHeight;
+
+	$('.page_header_container').css({
+		'width': newWidth+'px',
+		'height': headHeight+'px'
+		});
+	$('.page_body_container').css({
+		'top': headHeight+'px',
+		'width': newWidth+'px',
+		'height': newHeight+'px'
+		});
 }
 
 $(function() { // on page ready

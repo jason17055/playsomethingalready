@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html>
 <head>
 <title>Play Something Already!</title>
@@ -10,6 +11,7 @@
 <body>
 <div id="dimmer"></div>
 
+<div class="page_header_container">
 <div class="page_header">
 <div style="float:left">
 <button type="button" onclick="pickgames_back_clicked()">&lt; Back</button>
@@ -22,7 +24,9 @@ What games are available?
 </div>
 <div style="clear:both"></div>
 </div><!--/page_header-->
+</div><!--/page_header_container-->
 
+<div class="page_body_container">
 <div class="page_body">
 
 <div class="multi_select_icon_list_container">
@@ -42,6 +46,7 @@ What games are available?
 <button type="button" onclick="other_game_clicked()">Other Game</button>
 </div>
 </div><!--/page_body-->
+</div><!--/page_body_container-->
 
 <div id="new_game_dialog" class="dialog">
 <div class="dialog_inner">

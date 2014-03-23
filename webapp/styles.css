@@ -2,6 +2,22 @@
 	display: none !important;
 }
 
+body {
+	overflow: hidden;
+}
+
+.page_header_container {
+	position: absolute;
+	width: 640px;
+}
+
+.page_body_container {
+	position: absolute;
+	width: 640px;
+	height: 300px;
+	overflow-y: scroll;
+}
+
 .smallScreen .multi_select_icon_list .list_item {
 	height: 116px;
 	width: 100px;
@@ -121,7 +137,7 @@ body {
 }
 
 .page_header {
-	padding: 6pt;
+	padding: 6px;
 	border-bottom: 1px solid black;
 	text-align: center;
 }

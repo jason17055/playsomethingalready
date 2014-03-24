@@ -295,7 +295,7 @@ function pickgames_back_clicked()
 
 function pickgames_next_clicked()
 {
-	alert('not implemented');
+	location.href = "menu.html";
 }
 
 function pickpersons_back_clicked()
@@ -304,6 +304,11 @@ function pickpersons_back_clicked()
 }
 
 function pickpersons_next_clicked()
+{
+	location.href = "pickgames.html";
+}
+
+function menupage_back_clicked()
 {
 	location.href = "pickgames.html";
 }
@@ -341,10 +346,45 @@ function check_screen_size()
 		});
 }
 
+function init_votebyperson_page()
+{
+	var persons = mystor_get_list(PACKAGE+'.events['+my_event()+'].persons');
+	// pick one of them at random
+	var i = Math.floor(Math.random() * persons.length);
+	var pid = persons[i];
+	var p = {
+		'name': localStorage.getItem(PACKAGE+'.persons['+pid+'].name'),
+		'icon': localStorage.getItem(PACKAGE+'.persons['+pid+'].icon')
+		};
+
+	$('.person_name').text(p.name);
+	$('.person_icon').attr('src',
+		p.icon ? ('images/persons/'+p.icon+'.png') :
+				'images/generic_person.png'
+		);
+
+	for (var i = 0; i < persons.length; i++) {
+		if (persons[i] == pid) {
+			continue;
+		}
+		var p = {
+			'name': localStorage.getItem(PACKAGE+'.persons['+persons[i]+'].name')
+			};
+		var $o = $('<option value=""></option>');
+		$o.text(p.name);
+		$o.attr('value', persons[i]);
+		$('#someoneelse_cmb').append($o);
+	}
+}
+
 $(function() { // on page ready
 
 	$('.game_list').each(function(i,el) { init_game_list(el); });
 	$('.persons_list').each(function(i,el) { init_person_list(el); });
+
+	if (document.getElementById('votebyperson_page')) {
+		init_votebyperson_page();
+	}
 
 	check_screen_size();
 	window.onresize = check_screen_size;
